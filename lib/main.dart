@@ -88,16 +88,10 @@ class MyRouteInformationParser
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.goToStep});
   final Function(int) goToStep;
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int? _goToStep;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,16 +100,19 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextFormField(
-              onChanged: (value) => setState(() {
-                _goToStep = int.tryParse(value);
-              }),
+            ElevatedButton(
+              onPressed: () => goToStep(1),
+              child: const Text('Go to Step 1'),
             ),
             ElevatedButton(
-              onPressed:
-                  _goToStep == null ? null : () => widget.goToStep(_goToStep!),
-              child: const Text('Go to Step'),
+              onPressed: () => goToStep(2),
+              child: const Text('Go to Step 2'),
+            ),
+            ElevatedButton(
+              onPressed: () => goToStep(3),
+              child: const Text('Go to Step 3'),
             ),
           ],
         ),
@@ -139,6 +136,7 @@ class Step1Page extends StatelessWidget {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(step1Text),
             ElevatedButton(
@@ -165,9 +163,14 @@ class Step2Page extends StatelessWidget {
         title: const Text('Step 2'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => goToStep(3),
-          child: const Text('Go to Step 3'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () => goToStep(3),
+              child: const Text('Go to Step 3'),
+            ),
+          ],
         ),
       ),
     );
@@ -186,6 +189,7 @@ class Step3Page extends StatelessWidget {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
               onPressed: () => step1Text = 'Modified step 1 text',
