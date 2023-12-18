@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-String step1Text = 'Original step 1 text';
+final step1Text = ValueNotifier('Original step 1 text');
+final delegate = MyRouterDelegate();
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => MyRouterDelegate(),
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
@@ -18,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerDelegate: context.read<MyRouterDelegate>(),
+      routerDelegate: delegate,
       routeInformationParser: MyRouteInformationParser(),
     );
   }
@@ -121,15 +118,15 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 1,
+              onPressed: () => delegate.currentStep = 1,
               child: const Text('Go to Step 1'),
             ),
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 2,
+              onPressed: () => delegate.currentStep = 2,
               child: const Text('Go to Step 2'),
             ),
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 3,
+              onPressed: () => delegate.currentStep = 3,
               child: const Text('Go to Step 3'),
             ),
           ],
@@ -154,9 +151,13 @@ class Step1Page extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(step1Text),
+            ValueListenableBuilder(
+                valueListenable: step1Text,
+                builder: (_, text, __) {
+                  return Text(text);
+                }),
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 2,
+              onPressed: () => delegate.currentStep = 2,
               child: const Text('Go to Step 2'),
             ),
           ],
@@ -181,7 +182,7 @@ class Step2Page extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 3,
+              onPressed: () => delegate.currentStep = 3,
               child: const Text('Go to Step 3'),
             ),
           ],
@@ -207,11 +208,11 @@ class Step3Page extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
-              onPressed: () => step1Text = 'Modified step 1 text',
+              onPressed: () => step1Text.value = 'modified',
               child: const Text('Modify step 1 text'),
             ),
             ElevatedButton(
-              onPressed: () => context.read<MyRouterDelegate>().currentStep = 0,
+              onPressed: () => delegate.currentStep = 0,
               child: const Text('Back to Home Page'),
             ),
           ],
