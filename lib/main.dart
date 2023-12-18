@@ -45,6 +45,7 @@ class MyRouterDelegate extends RouterDelegate<RouteInformation>
   set currentStep(int value) {
     if (_currentStep != value) {
       _currentStep = value;
+      _pages = _generate(value);
       notifyListeners();
     }
   }
@@ -75,27 +76,7 @@ class MyRouterDelegate extends RouterDelegate<RouteInformation>
   Widget build(BuildContext context) {
     return Navigator(
       key: navigatorKey,
-      pages: [
-        const MaterialPage(
-          key: ValueKey('HomePage'),
-          child: HomePage(),
-        ),
-        if (currentStep > 0)
-          const MaterialPage(
-            key: ValueKey('Step1Page'),
-            child: Step1Page(),
-          ),
-        if (currentStep > 1)
-          const MaterialPage(
-            key: ValueKey('Step2Page'),
-            child: Step2Page(),
-          ),
-        if (currentStep > 2)
-          const MaterialPage(
-            key: ValueKey('Step3Page'),
-            child: Step3Page(),
-          ),
-      ],
+      pages: _pages,
       onPopPage: (route, result) {
         if (!route.didPop(result)) {
           return false;
